@@ -1,0 +1,313 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>ngx-indexed-db</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">ngx-indexed-db</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> ngx-indexed-db</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h1 id="ngx-indexed-db">ngx-indexed-db</h1>
+				<p><a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/assuncaocharles/ngx-indexed-db.svg" alt="Greenkeeper badge"></a> <a href="https://www.codefactor.io/repository/github/assuncaocharles/ngx-indexed-db/overview/master"><img src="https://www.codefactor.io/repository/github/assuncaocharles/ngx-indexed-db/badge/master" alt="CodeFactor"></a> <a href="https://travis-ci.com/assuncaocharles/ngx-indexed-db"><img src="https://travis-ci.com/assuncaocharles/ngx-indexed-db.svg?branch=master" alt="Build Status"></a></p>
+				<p>ngx-indexed-db is a service that wraps IndexedDB database in an Angular service.
+				It exposes very simple promises API to enable the usage of IndexedDB without most of it plumbing.</p>
+				<h2 id="installation">Installation</h2>
+				<pre><code>npm <span class="hljs-keyword">install</span> ngx-indexed-db</code></pre><h2 id="usage">Usage</h2>
+				<p>Import the the <code>NgxIndexedDB</code> class as a dependency:</p>
+				<pre><code class="language-js"><span class="hljs-keyword">import</span> { NgxIndexedDB } <span class="hljs-keyword">from</span> <span class="hljs-string">'ngx-indexed-db'</span>;</code></pre>
+				<h3 id="ngxindexeddb-service">NgxIndexedDB service</h3>
+				<p>First instantiate the service as follows:</p>
+				<pre><code class="language-js"><span class="hljs-keyword">let</span> db = <span class="hljs-keyword">new</span> NgxIndexedDB(<span class="hljs-string">'myDb'</span>, <span class="hljs-number">1</span>);</code></pre>
+				<p>The first argument is the name of your database and the second is the database version.
+				If you forget the version you the service will default to version 1.</p>
+				<p>Use the APIs that the NgxIndexedDB service exposes to use indexeddb.
+				In the API the following functions:</p>
+				<ul>
+					<li>openDatabase(version, createCallback): opens the database for usage and update it&#39;s objectStore/s.
+						The first parameter is the version to upgrade the database and the second one is an optional callback that will handle the creation of objectStores for that version if needed.
+					<strong>openDatabase</strong> returns a promise that is resolved when the database is open or updated or rejected if an error occurred.</li>
+				</ul>
+				<p>Usage example:</p>
+				<pre><code class="language-js">db.openDatabase(<span class="hljs-number">1</span>, evt =&gt; {
+    <span class="hljs-keyword">let</span> objectStore = evt.currentTarget.result.createObjectStore(<span class="hljs-string">'people'</span>, { <span class="hljs-attr">keyPath</span>: <span class="hljs-string">'id'</span>, <span class="hljs-attr">autoIncrement</span>: <span class="hljs-literal">true</span> });
+
+    objectStore.createIndex(<span class="hljs-string">'name'</span>, <span class="hljs-string">'name'</span>, { <span class="hljs-attr">unique</span>: <span class="hljs-literal">false</span> });
+    objectStore.createIndex(<span class="hljs-string">'email'</span>, <span class="hljs-string">'email'</span>, { <span class="hljs-attr">unique</span>: <span class="hljs-literal">true</span> });
+});</code></pre>
+				<ul>
+					<li>getByKey(storeName, key): returns the object that is stored in the objectStore by its key.
+						The first parameter is the store name to query and the second one is the object&#39;s key.
+					<strong>getByKey</strong> returns a promise that is resolved when we have the object or rejected if an error occurred.</li>
+				</ul>
+				<p>Usage example:</p>
+				<pre><code class="language-js">db.getByKey(<span class="hljs-string">'people'</span>, <span class="hljs-number">1</span>).then(
+    <span class="hljs-function"><span class="hljs-params">person</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(person);
+    },
+    error =&gt; {
+        <span class="hljs-built_in">console</span>.log(error);
+    }
+);</code></pre>
+				<ul>
+					<li>getAll(storeName, keyRange, indexDetails): returns an array of all the items in the given objectStore.
+						The first parameter is the store name to query.
+						The second parameter is an optional IDBKeyRange object.
+						The third parameter is an index details which must include index name and an optional order parameter.
+					<strong>getAll</strong> returns a promise that is resolved when we have the array of items or rejected if an error occurred.</li>
+				</ul>
+				<p>Usage example:</p>
+				<pre><code class="language-js">db.getAll(<span class="hljs-string">'people'</span>).then(
+    <span class="hljs-function"><span class="hljs-params">people</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(people);
+    },
+    error =&gt; {
+        <span class="hljs-built_in">console</span>.log(error);
+    }
+);</code></pre>
+				<ul>
+					<li>getByIndex(storeName, indexName, key): returns an stored item using an objectStore&#39;s index.
+						The first parameter is the store name to query, the second parameter is the index and third parameter is the item to query.
+					<strong>getByIndex</strong> returns a promise that is resolved when the item successfully returned or rejected if an error occurred.</li>
+				</ul>
+				<p>Usage example:</p>
+				<pre><code class="language-js">db.getByIndex(<span class="hljs-string">'people'</span>, <span class="hljs-string">'name'</span>, <span class="hljs-string">'Dave'</span>).then(
+    <span class="hljs-function"><span class="hljs-params">person</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(person);
+    },
+    error =&gt; {
+        <span class="hljs-built_in">console</span>.log(error);
+    }
+);</code></pre>
+				<ul>
+					<li>add(storeName, value, key): Adds to the given objectStore the key and value pair.
+						The first parameter is the store name to modify, the second parameter is the value and the third parameter is the key (if not auto-generated).
+					<strong>add</strong> returns a promise that is resolved when the value was added or rejected if an error occurred.</li>
+				</ul>
+				<p>Usage example (add without a key):</p>
+				<pre><code class="language-js">db.add(<span class="hljs-string">'people'</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">'name'</span>, <span class="hljs-attr">email</span>: <span class="hljs-string">'email'</span> }).then(
+    <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        <span class="hljs-comment">// Do something after the value was added</span>
+    },
+    error =&gt; {
+        <span class="hljs-built_in">console</span>.log(error);
+    }
+);</code></pre>
+				<p>In the previous example I&#39;m using undefined as the key because the key is configured in the objectStore as auto-generated.</p>
+				<ul>
+					<li>update(storeName, value, key?): Updates the given value in the objectStore.
+						The first parameter is the store name to modify, the second parameter is the value to update and the third parameter is the key (if there is no key don&#39;t provide it).
+					<strong>update</strong> returns a promise that is resolved when the value was updated or rejected if an error occurred.</li>
+				</ul>
+				<p>Usage example (update without a key):</p>
+				<pre><code class="language-js">db.update(<span class="hljs-string">'people'</span>, { <span class="hljs-attr">id</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'name'</span>, <span class="hljs-attr">email</span>: <span class="hljs-string">'email'</span> }).then(
+    <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        <span class="hljs-comment">// Do something after update</span>
+    },
+    error =&gt; {
+        <span class="hljs-built_in">console</span>.log(error);
+    }
+);</code></pre>
+				<ul>
+					<li>delete(storeName, key): deletes the object that correspond with the key from the objectStore.
+						The first parameter is the store name to modify and the second parameter is the key to delete.
+					<strong>delete</strong> returns a promise that is resolved when the value was deleted or rejected if an error occurred.</li>
+				</ul>
+				<p>Usage example:</p>
+				<pre><code class="language-js">db.delete(<span class="hljs-string">'people'</span>, <span class="hljs-number">3</span>).then(
+    <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        <span class="hljs-comment">// Do something after delete</span>
+    },
+    error =&gt; {
+        <span class="hljs-built_in">console</span>.log(error);
+    }
+);</code></pre>
+				<ul>
+					<li>openCursor(storeName, cursorCallback, keyRange): opens an objectStore cursor to enable iterating on the objectStore.
+						The first parameter is the store name, the second parameter is a callback function to run when the cursor succeeds to be opened and the third parameter is optional IDBKeyRange object.
+					<strong>openCursor</strong> returns a promise that is resolved when the cursor finishes running or rejected if an error occurred.</li>
+				</ul>
+				<p>Usage example:</p>
+				<pre><code class="language-js">db.openCursor(<span class="hljs-string">'people'</span>, (evt) =&gt; {
+    <span class="hljs-keyword">var</span> cursor = (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">any</span>&gt;</span>evt.target).result;
+    if(cursor) {
+        console.log(cursor.value);
+        cursor.continue();
+    } else {
+        console.log('Entries all displayed.');
+    }
+}, IDBKeyRange.bound("A", "F"));</span></code></pre>
+				<ul>
+					<li>clear(storeName): clears all the data in an objectStore.
+						The first parameter is the store name to clear.
+					<strong>clear</strong> returns a promise that is resolved when the objectStore was cleared or rejected if an error occurred.</li>
+				</ul>
+				<p>Usage example:</p>
+				<pre><code class="language-js">db.clear(<span class="hljs-string">'people'</span>).then(
+    <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        <span class="hljs-comment">// Do something after clear</span>
+    },
+    error =&gt; {
+        <span class="hljs-built_in">console</span>.log(error);
+    }
+);</code></pre>
+				<ul>
+					<li>deleteDatabase(): deletes the entire database.</li>
+				</ul>
+				<p>Usage example:</p>
+				<pre><code class="language-js">db.deleteDatabase().then(
+    <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Database deleted successfully'</span>);
+    },
+    error =&gt; {
+        <span class="hljs-built_in">console</span>.log(error);
+    }
+);</code></pre>
+				<h2 id="license">License</h2>
+				<p>Released under the terms of the <a href="LICENSE">MIT License</a>.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_lib_ngx_indexed_db_.html">"lib/ngx-<wbr>indexed-<wbr>db"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_public_api_.html">"public_<wbr>api"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
