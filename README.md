@@ -189,6 +189,24 @@ db.openCursor('people', (evt) => {
 }, IDBKeyRange.bound("A", "F"));
 ```
 
+-   openCursorWithIndex(storeName, indexName, cursorCallback, keyRange): opens an objectStore cursor to enable iterating on the objectStore on provided index.
+    The first parameter is the store name, the second parameter is the index, the third parameter is a callback function to run when the cursor succeeds to be opened and the fourth parameter is optional IDBKeyRange object.
+    **openCursorWithIndex** returns a promise that is resolved when the cursor finishes running or rejected if an error occurred.
+
+Usage example:
+
+```js
+db.openCursorWithIndex('people', 'firstname', (evt) => {
+    var cursor = (<any>evt.target).result;
+    if(cursor) {
+        console.log(cursor.value);
+        cursor.continue();
+    } else {
+        console.log('Entries all displayed.');
+    }
+}, IDBKeyRange.bound("A", "F"));
+```
+
 -   clear(storeName): clears all the data in an objectStore.
     The first parameter is the store name to clear.
     **clear** returns a promise that is resolved when the objectStore was cleared or rejected if an error occurred.

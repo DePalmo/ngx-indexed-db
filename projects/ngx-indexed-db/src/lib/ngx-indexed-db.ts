@@ -169,6 +169,23 @@ export class NgxIndexedDB {
 		});
 	}
 
+	openCursorWithIndex(storeName: string, indexName: string, cursorCallback: (evt: Event) => void, keyRange?: IDBKeyRange) {
+		return new Promise<any>((resolve, reject) => {
+			this.dbWrapper.validateBeforeTransaction(storeName, reject);
+			let transaction = this.dbWrapper.createTransaction(
+				this.dbWrapper.optionsGenerator(DBMode.readonly, storeName, reject, resolve)
+				),
+				objectStore = transaction.objectStore(storeName),
+				index = objectStore.index(indexName),
+				request = index.openCursor(keyRange);
+
+			request.onsuccess = (evt: Event) => {
+				cursorCallback(evt);
+				resolve();
+			};
+		});
+	}
+
 	clear(storeName: string) {
 		return new Promise<any>((resolve, reject) => {
 			this.dbWrapper.validateBeforeTransaction(storeName, reject);
