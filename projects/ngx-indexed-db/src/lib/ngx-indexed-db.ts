@@ -11,7 +11,7 @@ export class NgxIndexedDB {
 		return new Promise<any>((resolve, reject) => {
 			this.dbWrapper.dbVersion = version;
 			let request = this.utils.indexedDB.open(this.dbWrapper.dbName, version);
-			request.onsuccess = e => {
+			request.onsuccess = () => {
 				this.dbWrapper.db = request.result;
 				resolve();
 			};
@@ -128,6 +128,21 @@ export class NgxIndexedDB {
 		});
 	}
 
+	updateBulk(storeName: string, values: Array<any>, key?: any) {
+		return new Promise((resolve, reject) => {
+			this.dbWrapper.validateBeforeTransaction(storeName, reject);
+
+			let transaction = this.dbWrapper.createTransaction(
+				this.dbWrapper.optionsGenerator(DBMode.readwrite, storeName, reject, resolve)
+			),
+				objectStore = transaction.objectStore(storeName);
+
+			values.forEach(value => {
+				objectStore.put(value, key);
+			});
+		});
+	}
+
 	delete(storeName: string, key: any) {
 		return new Promise<any>((resolve, reject) => {
 			this.dbWrapper.validateBeforeTransaction(storeName, reject);
@@ -137,7 +152,22 @@ export class NgxIndexedDB {
 				),
 				objectStore = transaction.objectStore(storeName);
 
-			objectStore['delete'](key);
+			objectStore.delete(key);
+		});
+	}
+
+	deleteBulk(storeName: string, keys: Array<any>) {
+		return new Promise<any>((resolve, reject) => {
+			this.dbWrapper.validateBeforeTransaction(storeName, reject);
+
+			let transaction = this.dbWrapper.createTransaction(
+				this.dbWrapper.optionsGenerator(DBMode.readwrite, storeName, reject, resolve)
+				),
+				objectStore = transaction.objectStore(storeName);
+
+			keys.forEach(key => {
+				objectStore.delete(key);
+			});
 		});
 	}
 
