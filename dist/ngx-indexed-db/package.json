@@ -1,0 +1,21 @@
+{
+  "name": "ngx-indexed-db",
+  "version": "2.3.0",
+  "peerDependencies": {
+    "@angular/common": "^8.0.0-rc.0 || ^8.0.0",
+    "@angular/core": "^8.0.0-rc.0 || ^8.0.0"
+  },
+  "main": "bundles/ngx-indexed-db.umd.js",
+  "module": "fesm5/ngx-indexed-db.js",
+  "es2015": "fesm2015/ngx-indexed-db.js",
+  "esm5": "esm5/ngx-indexed-db.js",
+  "esm2015": "esm2015/ngx-indexed-db.js",
+  "fesm5": "fesm5/ngx-indexed-db.js",
+  "fesm2015": "fesm2015/ngx-indexed-db.js",
+  "typings": "ngx-indexed-db.d.ts",
+  "metadata": "ngx-indexed-db.metadata.json",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  }
+}
